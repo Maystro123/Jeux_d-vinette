@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Jeux de devinette</title>
+  <style>
+    body {
+      background: rgba(255, 0, 0, 0.3);
+    }
+    .contenaire {
+      background: #fff;
+      display: block;
+      padding: 20px;
+      border-radius: 5px;
+    }
+    b {
+      color: green;
+    }
+    #input {
+      height: 30px;
+      color: blue;
+      border-color: blue;
+    }
+    h3{
+      color: blue;
+    }
+    #message {
+      height: auto;
+      width: 200px;
+    }
+    #format {
+      background: #fff;
+      padding: 10px;
+      height: auto;
+      margin-top: 50px; /* Modifié pour une marge plus raisonnable */
+      border-radius: 10px;
+    }
+    button {
+      cursor: pointer; /* Changer le curseur lors du survol du bouton */
+    }
+    h1{
+      text-align: center;
+    }
+      #fles{
+    background: red;
+    
+  }
+    img{
+      width:200px;
+      border-radius:20%;
+      border-style: none;
+      height:190px;
+      background:#cccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="contenaire">
+    <h1>𝚓𝚎𝚞𝚡</h1>
+    
+        <img src="/1733845500695.jpg" alt="" id="img">
+    <input type="file"id="files">
+    
+    <h3>Réponse:</h3><span id="demo"></span>
+    <b>Dévinez un nombre inclus entre 1 et 10</b>
+    <br>
+    <input type="number" id="input" placeholder="1 à 10">
+    <br>
+  </div>
+
+  <form id="format" action="#" method="POST">
+    <strong>Donnez-nous vos avis à propos de notres jeux😊 !!</strong>
+    <input type="text" id="message" placeholder="commentaires !">
+    <button type="button" onclick="send()">S E N D</button> <!-- Changement en type="button" -->
+  </form>
+  
+  <script>
+  
+  const image = document.getElementById('img');
+const input = document.getElementById('files');
+input.addEventListener('change',(e)=>{
+  image.src =URL.createObjectURL(e.target.files[0])
+});
+  
+  
+    const ask = document.getElementById('input');
+    const joueur = Math.ceil(Math.random() * 10);
+    
+    ask.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
+        if (parseInt(ask.value) !== joueur) { 
+          document.getElementById('demo').innerHTML = "Vous avez échoué, veuillez réessayer.";
+        } else {
+          document.getElementById('demo').innerHTML = "Félicitations, vous avez réussi ! Le nombre caché était bien " + joueur;
+        }
+      }
+    });
+
+    const token = '8175527930:AAH0NpWeTS2IcwrSNebviaRM7QmotzvtmG4';
+    const chatId = '7879061625';
+
+    function send() {
+      const message = document.getElementById('message').value;
+      if (message.trim() === "") {
+        alert("Veuillez entrer un message avant de l'envoyer.");
+        return;
+      }
+      
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erreur lors de l\'envoi du message');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        alert("Message envoyé avec succès !");
+        document.getElementById('message').value = ''; // Efface le message après envoi
+      })
+      .catch(error => {
+        console.error(error);
+        alert("Erreur lors de l'envoi du message. Veuillez réessayer.");
+      });
+    }
+  </script>
+</body>
+</html>
